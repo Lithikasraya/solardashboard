@@ -26,25 +26,41 @@ export default function ChartSection({data, maxPower=3}){
       <div style={{width:'100%', height:220}}>
         <ResponsiveContainer>
           <LineChart data={recent}>
+            <defs>
+              <linearGradient id="lineGradient" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#10b981" />
+                <stop offset="100%" stopColor="#3b82f6" />
+              </linearGradient>
+            </defs>
             <XAxis dataKey="time" hide />
-            <YAxis domain={[0, maxPower]} />
-            <Tooltip />
-            <Line type="monotone" dataKey="power" stroke="#34d399" strokeWidth={2} dot={false} />
+            <YAxis domain={[0, maxPower]} stroke="currentColor" tick={{fill: 'currentColor'}} label={{ value: 'kW', angle: -90, position: 'insideLeft', fill: 'currentColor' }} className="dark:text-slate-300 text-slate-700" />
+            <Tooltip contentStyle={{backgroundColor: 'rgba(15,23,42,0.95)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: '8px', color: '#fff'}} labelStyle={{color: '#e0f2fe'}} />
+            <Line type="monotone" dataKey="power" stroke="url(#lineGradient)" strokeWidth={3} dot={false} strokeLinecap="round" />
           </LineChart>
         </ResponsiveContainer>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div style={{height:180}} className="card-glass p-3 rounded-2xl">
-          <h4 className="text-sm text-slate-300 mb-2">Voltage & Current</h4>
+          <h4 className="text-sm dark:text-slate-200 text-slate-700 mb-2">Voltage & Current</h4>
           <ResponsiveContainer width="100%" height={120}>
-            <BarChart data={recent}>
+            <BarChart data={recent} barSize={8} barCategoryGap={8}>
+              <defs>
+                <linearGradient id="voltageGrad" x1="0" x2="1">
+                  <stop offset="0%" stopColor="#3b82f6" />
+                  <stop offset="100%" stopColor="#8b5cf6" />
+                </linearGradient>
+                <linearGradient id="currentGrad" x1="0" x2="1">
+                  <stop offset="0%" stopColor="#8b5cf6" />
+                  <stop offset="100%" stopColor="#ec4899" />
+                </linearGradient>
+              </defs>
               <XAxis dataKey="time" hide />
-              <YAxis />
-              <Tooltip />
+              <YAxis stroke="currentColor" tick={{fill: 'currentColor'}} className="dark:text-slate-300 text-slate-700" />
+              <Tooltip contentStyle={{backgroundColor: 'rgba(15,23,42,0.95)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: '8px', color: '#fff'}} labelStyle={{color: '#e0f2fe'}} />
               <Legend />
-              <Bar dataKey="voltage" fill="#60a5fa" />
-              <Bar dataKey="current" fill="#f97316" />
+              <Bar dataKey="voltage" fill="url(#voltageGrad)" />
+              <Bar dataKey="current" fill="url(#currentGrad)" />
             </BarChart>
           </ResponsiveContainer>
         </div>
